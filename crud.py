@@ -1,12 +1,10 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import sessionmaker, Session, relationship
-
-
 from sqlalchemy.ext.declarative import declarative_base
 from pydantic import BaseModel
 import auth
-
-DATABASE_URL = "postgresql://postgres:password@localhost:5432/url_shortener_db"
+import os
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:password@localhost:5432/url_shortener_db")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
