@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # Our FastAPI application service
+  web:
+    build: .
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    environment:
+      - DATABASE_URL=postgresql://postgres:your_password@host.docker.internal:5432/url_shortener_db
+      # Add these so our app knows where to find Redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+  
+  # The Nginx reverse proxy service
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - web
+
+  # NEW: The Redis caching service
+  redis:
+    image: redis:alpine # Use a lightweight Redis image
