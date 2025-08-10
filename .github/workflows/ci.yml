@@ -1,0 +1,45 @@
+name: Run Python Tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # This new "services" section starts a PostgreSQL container
+    services:
+      postgres:
+        image: postgres:16-alpine # Use a lightweight postgres image
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432 # Map the port
+        # Health check to wait until postgres is ready
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run tests
+        # This "env" section provides the DATABASE_URL to the test step
+        env:
+          DATABASE_URL: "postgresql://testuser:testpassword@localhost:5432/testdb"
+        run: |
+          pytest
