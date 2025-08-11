@@ -14,7 +14,6 @@ import jwt
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 app= FastAPI()
-Base.metadata.create_all(bind=engine)
 
 def get_current_user(
     token: str = Depends(oauth2_scheme),

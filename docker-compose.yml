@@ -6,7 +6,7 @@ services:
     build: .
     command: uvicorn main:app --host 0.0.0.0 --port 8000
     environment:
-      - DATABASE_URL=postgresql://postgres:your_password@host.docker.internal:5432/url_shortener_db
+      - DATABASE_URL=postgresql://postgres:password@host.docker.internal:5432/url_shortener_db
       # Add these so our app knows where to find Redis
       - REDIS_HOST=redis
       - REDIS_PORT=6379
