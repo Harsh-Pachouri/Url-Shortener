@@ -23,7 +23,7 @@ class URL(Base):
     target_url = Column(String)
     short_key = Column(String)
     owner_id = Column(Integer, ForeignKey("users.id"))
-
+    clicks = Column(Integer, default=0, nullable = False)
     owner = relationship("USER", back_populates="urls")
 
 class URLBase(BaseModel):

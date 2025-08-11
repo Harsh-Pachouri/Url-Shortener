@@ -88,6 +88,8 @@ def forward_to_target_url(
 ):
     url = crud.get_url_by_key(db, key)
     if url:
+        url.clicks+=1
+        db.commit()
         return RedirectResponse(url.target_url)
     else:
         raise HTTPException(status_code = 404, detail = "URL not found")
