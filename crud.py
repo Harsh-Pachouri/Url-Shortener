@@ -23,7 +23,7 @@ class URL(Base):
     target_url = Column(String)
     short_key = Column(String)
     owner_id = Column(Integer, ForeignKey("users.id"))
-    clicks = Column(Integer, default=0, nullable = False)
+    # clicks = Column(Integer, default=0, nullable = False)  # Temporarily disabled
     owner = relationship("USER", back_populates="urls")
 
 class URLBase(BaseModel):
@@ -101,3 +101,13 @@ def create_user(
 def get_user_by_username(db: Session, name: str):
     user = db.query(USER).filter(USER.username == name).first()
     return user
+
+# Click counting functionality temporarily removed
+# def increment_click_count(key: str):
+#     db = SessionLocal()
+#     url = get_url_by_key(db, key)
+#     if url is not None:
+#         url.clicks+=1
+#         db.commit()
+    
+

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkSnap - URL Shortener</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>🔗 LinkSnap</h1>
+                <p>Shorten your links with style</p>
+            </div>
+            <div class="user-info" id="userInfo" style="display: none;">
+                <span id="welcomeText"></span>
+                <button class="btn-secondary" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <!-- Auth Section -->
+        <div class="auth-section" id="authSection">
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <button class="tab-btn active" onclick="showLogin()">Login</button>
+                    <button class="tab-btn" onclick="showRegister()">Register</button>
+                </div>
+
+                <!-- Login Form -->
+                <div class="auth-form" id="loginForm">
+                    <h2>Welcome Back</h2>
+                    <form onsubmit="login(event)">
+                        <div class="form-group">
+                            <label for="loginUsername">Username</label>
+                            <input type="text" id="loginUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Sign In</button>
+                    </form>
+                </div>
+
+                <!-- Register Form -->
+                <div class="auth-form" id="registerForm" style="display: none;">
+                    <h2>Create Account</h2>
+                    <form onsubmit="register(event)">
+                        <div class="form-group">
+                            <label for="registerUsername">Username</label>
+                            <input type="text" id="registerUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Create Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main App Section -->
+        <div class="main-section" id="mainSection" style="display: none;">
+            <div class="url-shortener">
+                <div class="shortener-card">
+                    <h2>Shorten Your URL</h2>
+                    <form onsubmit="shortenUrl(event)">
+                        <div class="form-group">
+                            <label for="targetUrl">Enter your long URL</label>
+                            <input type="url" id="targetUrl" placeholder="https://example.com/very-long-url" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Shorten URL</button>
+                    </form>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section" id="resultsSection" style="display: none;">
+                    <div class="result-card">
+                        <h3>Your shortened URL is ready!</h3>
+                        <div class="url-result">
+                            <div class="short-url">
+                                <label>Short URL:</label>
+                                <div class="url-display">
+                                    <input type="text" id="shortUrl" readonly>
+                                    <button class="btn-copy" onclick="copyToClipboard()">Copy</button>
+                                </div>
+                            </div>
+                            <div class="original-url">
+                                <label>Original URL:</label>
+                                <span id="originalUrl"></span>
+                            </div>
+                        </div>
+                        <button class="btn-secondary" onclick="resetForm()">Shorten Another</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script src="/static/script.js"></script>
+    
+    <!-- Debug info -->
+    <script>
+        console.log('HTML loaded successfully');
+        console.log('Current URL:', window.location.href);
+    </script>
+</body>
+</html>

@@ -1,7 +1,8 @@
 import secrets
-from fastapi import FastAPI, Depends,  HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse, FileResponse
 from sqlalchemy.orm import Session
-from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 import crud
 from crud import User, UserCreate, TOKEN, Base, engine
@@ -13,7 +14,10 @@ import jwt
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-app= FastAPI()
+app = FastAPI()
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 def get_current_user(
     token: str = Depends(oauth2_scheme),
@@ -40,9 +44,10 @@ def get_current_user(
 def create_random_key(length: int = 5) -> str:
     return secrets.token_urlsafe(length)
 
+
 @app.get("/")
 def root():
-    return {"Welcome!":"This is a URL shortener"}
+    return FileResponse("static/index.html")
 
 @app.post("/register", response_model=User)
 def register(
@@ -88,9 +93,7 @@ def forward_to_target_url(
 ):
     url = crud.get_url_by_key(db, key)
     if url:
-        url.clicks+=1
-        db.commit()
+        # Click counting temporarily disabled due to database schema
         return RedirectResponse(url.target_url)
     else:
         raise HTTPException(status_code = 404, detail = "URL not found")
-
