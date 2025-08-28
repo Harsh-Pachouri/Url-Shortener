@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import sessionmaker, Session, relationship
 from sqlalchemy.ext.declarative import declarative_base
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 import auth
 # In crud.py
 import os
@@ -53,8 +53,8 @@ class USER(Base):
     urls = relationship("URL", back_populates="owner")
     
 class UserCreate(BaseModel):
-    username: str
-    password: str
+    username: constr(min_length=1)
+    password: constr(min_length=1)
 
 class User(BaseModel):
     id: int
