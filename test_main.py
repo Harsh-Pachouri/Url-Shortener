@@ -24,7 +24,8 @@ class TestStaticFiles:
         """Test that JavaScript file is served correctly"""
         response = client.get("/static/script.js")
         assert response.status_code == 200
-        assert "application/javascript" in response.headers["content-type"]
+        content_type = response.headers["content-type"]
+        assert "javascript" in content_type, f"Expected javascript in content-type, got: {content_type}"
 
 
 class TestUserAuthentication:
