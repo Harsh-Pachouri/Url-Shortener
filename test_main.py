@@ -134,6 +134,8 @@ class TestURLShortening:
         assert data["target_url"] == "https://www.example.com"
         assert "id" in data
         assert "owner_id" in data
+        assert "clicks" in data
+        assert data["clicks"] == 0
     
     def test_shorten_url_unauthorized(self, client: TestClient):
         """Test URL shortening without authentication fails"""

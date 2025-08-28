@@ -2,6 +2,7 @@ import secrets
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 import crud
@@ -15,6 +16,15 @@ import jwt
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, specify your domain
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -93,7 +103,8 @@ def forward_to_target_url(
 ):
     url = crud.get_url_by_key(db, key)
     if url:
-        # Click counting temporarily disabled due to database schema
+        # Increment click count
+        crud.increment_click_count(db, key)
         return RedirectResponse(url.target_url)
     else:
         raise HTTPException(status_code = 404, detail = "URL not found")

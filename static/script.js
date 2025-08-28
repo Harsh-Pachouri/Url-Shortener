@@ -36,6 +36,8 @@ async function register(event) {
     setLoading(submitBtn, true);
     
     try {
+        console.log('Attempting registration for:', username);
+        
         const response = await fetch('/register', {
             method: 'POST',
             headers: {
@@ -44,7 +46,10 @@ async function register(event) {
             body: JSON.stringify({ username, password })
         });
         
+        console.log('Registration response status:', response.status);
+        
         const data = await response.json();
+        console.log('Registration response data:', data);
         
         if (response.ok) {
             showToast('Account created successfully! Please login.', 'success');
@@ -54,7 +59,8 @@ async function register(event) {
             showToast(data.detail || 'Registration failed', 'error');
         }
     } catch (error) {
-        showToast('Network error. Please try again.', 'error');
+        console.error('Registration error:', error);
+        showToast(`Network error: ${error.message}. Please try again.`, 'error');
     } finally {
         setLoading(submitBtn, false);
     }
@@ -70,6 +76,8 @@ async function login(event) {
     setLoading(submitBtn, true);
     
     try {
+        console.log('Attempting login for:', username);
+        
         const formData = new FormData();
         formData.append('username', username);
         formData.append('password', password);
@@ -79,7 +87,10 @@ async function login(event) {
             body: formData
         });
         
+        console.log('Login response status:', response.status);
+        
         const data = await response.json();
+        console.log('Login response data:', data);
         
         if (response.ok) {
             accessToken = data.access_token;
@@ -94,7 +105,8 @@ async function login(event) {
             showToast(data.detail || 'Login failed', 'error');
         }
     } catch (error) {
-        showToast('Network error. Please try again.', 'error');
+        console.error('Login error:', error);
+        showToast(`Network error: ${error.message}. Please try again.`, 'error');
     } finally {
         setLoading(submitBtn, false);
     }

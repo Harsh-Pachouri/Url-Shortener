@@ -1,12 +1,52 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: url-shortener-service
+  name: url-shortener-web-service
+  labels:
+    app: url-shortener
+    component: web
 spec:
   selector:
-    app: url-shortener-app
+    app: url-shortener
+    component: web
   type: NodePort
   ports:
-    - protocol: TCP
-      port: 8000
+    - name: http
+      protocol: TCP
+      port: 80
       targetPort: 8000
+      nodePort: 30080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  labels:
+    app: url-shortener
+    component: database
+spec:
+  selector:
+    app: url-shortener
+    component: database
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  labels:
+    app: url-shortener
+    component: cache
+spec:
+  selector:
+    app: url-shortener
+    component: cache
+  ports:
+    - name: redis
+      protocol: TCP
+      port: 6379
+      targetPort: 6379

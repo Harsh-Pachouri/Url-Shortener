@@ -1,24 +1,51 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: url-shortener-deployment
+  name: url-shortener-web
+  labels:
+    app: url-shortener
+    component: web
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: url-shortener-app
+      app: url-shortener
+      component: web
   template:
     metadata:
       labels:
-        app: url-shortener-app
+        app: url-shortener
+        component: web
     spec:
       containers:
       - name: web
-        image: url-shortener-app
-        imagePullPolicy: Never 
+        image: url-shortener-web:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 8000
-        # THIS SECTION IS THE FIX
         env:
         - name: DATABASE_URL
-          value: "postgresql://postgres:password@kubernetes.docker.internal:5432/url_shortener_db"
+          value: "postgresql://postgres:password@postgres-service:5432/url_shortener_db"
+        - name: REDIS_HOST
+          value: "redis-service"
+        - name: REDIS_PORT
+          value: "6379"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
