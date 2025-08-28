@@ -104,4 +104,20 @@ The API will now be available at `http://localhost:8080`.
 
 ## API Endpoints
 
-| Method | Path                 | Auth
+| Method | Path                 | Auth Required? | Description                                   |
+| :----- | :------------------- | :------------- | :-------------------------------------------- |
+| `POST` | `/api/query`         | No             | Queries the database using natural language.  |
+| `GET`  | `/api/products`      | No             | Retrieves a list of all products.             |
+| `GET`  | `/api/products/{id}` | No             | Retrieves a single product by its ID.         |
+| `POST` | `/api/products`      | No             | Creates a new product.                        |
+| `GET`  | `/api/suppliers`     | No             | Retrieves a list of all suppliers.            |
+| `POST` | `/api/suppliers`     | No             | Creates a new supplier.                       |
+
+## Running Tests
+
+To run the complete suite of unit and integration tests locally, use the following command. The integration tests will use Testcontainers to automatically start and stop their own temporary database and cache.
+```bash
+./mvnw test
+
+License
+Distributed under the MIT License. See LICENSE for more information.
